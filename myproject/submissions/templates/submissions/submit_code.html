@@ -1,0 +1,233 @@
+<!-- <!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Code Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/go/go.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var editor = CodeMirror.fromTextArea(document.getElementById("id_code"), {
+                lineNumbers: true,
+                mode: "text/javascript", // default mode
+                matchBrackets: true,
+                viewportMargin: Infinity
+            });
+
+            $('form').on('submit', function(event) {
+                event.preventDefault();
+                var code = editor.getValue(); // get the code from CodeMirror editor
+                var language = $('#id_language').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/send_code/',
+                    data: { 
+                        'code': code,  // CodeMirror에서 코드 가져오기
+                        'language': language,  // 선택된 언어 가져오기
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()  // CSRF 토큰 추가    
+                    }, // send the code and language
+                    success: function(response) {
+                        alert(response.message)
+                        $('#result_area').html(response); // Display the results
+                    }
+                });
+            });
+
+            $('#id_language').change(function() {
+                var mode = 'text/javascript'; // default
+                switch($(this).val()) {
+                    case 'python': mode = 'text/x-python'; break;
+                    case 'javascript': mode = 'text/javascript'; break;
+                    case 'java': mode = 'text/x-java'; break;
+                    case 'csharp': mode = 'text/x-csharp'; break;
+                    case 'go': mode = 'text/x-go'; break;
+                }
+                editor.setOption("mode", mode);
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            /* height: 100vh; Use the full height of the viewport */
+        }
+        .screen {
+            display: flex; /* Use flexbox to layout children side by side */
+            height: 100%;
+        }
+        form, #result {
+            flex: 1; /* Each child will take up equal space */
+            background: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .CodeMirror {
+            height: 500px; /* Adjust if necessary for better layout */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #5c67f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #result_area {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>온라인 코드 편집기</h1>
+    <div class="screen">
+        <form method="post">
+            <div class="form-field">
+                {% csrf_token %}
+                <label for="id_code">코드:</label>
+                <textarea id="id_code" name="code" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="id_language">언어 선택:</label>
+                <select id="id_language" name="language">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="csharp">C#</option>
+                    <option value="go">Go</option>
+                </select>
+            </div>
+            <button type="submit">코드 실행</button>
+        </form>
+        <div id="result">
+            <label for="result_area">결과:</label>
+            <div id="result_area"></div>
+        </div>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Code Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: 'send_code/', // Update this URL to where your server-side script lives
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        alert(response.message);
+                        //$('#result').html(response); // Display the results in the result section
+                        //$('form')[0].reset();
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        #temp {
+            display: flex;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        form, #result {
+            flex: 1; /* Each child will take up equal space */
+            background: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #id_code {
+            height: 300px; /* Adjust if necessary for better layout */
+        }
+        button {
+            background-color: #5c67f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>온라인 코드 편집기</h1>
+    <div id="temp">
+        <form method="post">
+            <div class="form-field">
+                <label for="id_code">코드:</label>
+                <textarea id="id_code" name="code" required></textarea>
+            </div>
+            <div class="form-field">
+                {% csrf_token %}
+                <label for="id_language">언어 선택:</label>
+                <select id="id_language" name="language">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="csharp">C#</option>
+                    <option value="go">Go</option>
+                </select>
+            </div>
+            <button type="submit">제출</button>
+        </form>
+        <div id="result">결과:
+            <!-- Results will be displayed here -->
+        </div>
+    </div>
+</body>
+</html>
