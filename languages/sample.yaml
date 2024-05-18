@@ -1,0 +1,83 @@
+
+version: 1
+
+language:
+  name: blurfx
+  compile:
+    pathname: /usr/bin/g++
+    argv: ["-std=c++17", "-O2", "-o", "./test/main", "./test/main.cpp", "-DONLINE_JUDGE", "-DBOJ"]
+    output_path: ./test/compile_output.txt
+    error_path: ./test/compile_error.txt
+  compile_limit:
+    time: 10000 # 10 seconds
+    memory: 268435456 # 256MB
+  execute:
+    pathname: ./test/main
+    #input_path: ./test/input.txt
+    output_path: ./test/output.txt
+    error_path: ./test/error.txt
+  time:
+    coef: 1
+    extra: 0
+  memory:
+    coef: 1
+    extra: 0
+  policy:
+    default_action: 0x7fff0000 # allow
+    syscalls:
+    - action: 0 # kill_thread
+      names:
+      - _sysctl
+      - acct
+      - add_key
+      - bpf
+      - chroot
+      - clock_adjtime
+      - clock_settime
+      - clone
+      - connect
+      - create_module
+      - delete_module
+      - finit_module
+      - fork
+      - get_kernel_syms
+      - get_mempolicy
+      - getdents
+      - getdents64
+      - init_module
+      - ioperm
+      - iopl
+      - kcmp
+      - kexec_file_load
+      - kexec_load
+      - keyctl
+      - lookup_dcookie
+      - mbind
+      - mount
+      - move_pages
+      - name_to_handle_at
+      - nfsservctl
+      - open_by_handle_at
+      - perf_event_open
+      - personality
+      - pivot_root
+      - process_vm_readv
+      - process_vm_writev
+      - ptrace
+      - query_module
+      - quotactl
+      - reboot
+      - request_key
+      - set_mempolicy
+      - setns
+      - setrlimit
+      - settimeofday
+      - swapoff
+      - swapon
+      - sysfs
+      - umount2
+      - unshare
+      - uselib
+      - userfaultfd
+      - ustat
+      - vfork
